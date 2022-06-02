@@ -1,0 +1,373 @@
+<div class="bg-blue-700 text-white flex justify-between items-center px-14 py-5">
+    <p class="text-3xl font-bold">Quản lý cửa hàng</p>
+    <div class="flex items-center text-sm">
+        <i class="uil uil-envelope mr-7 icon-badge text-2xl cursor-pointer"></i>
+        <i class="uil uil-bell mr-7 icon-badge text-2xl cursor-pointer"></i>
+        <!-- <p class="m-0 mr-7">Thành viên đăng nhập: <span class="font-semibold">admin</span></p> -->
+        <div class="mr-7 flex items-center">
+            <div class="w-[50px] mr-2">
+                <img src="../../../assets/images/admin-icon.png" alt="" class="max-w-full max-h-full block">
+            </div>
+            <div>
+                <p class="text-base font-semibold">Nguyễn Dũng</p>
+                <p>Manager</p>
+            </div>
+        </div>
+        <div class="px-2 py-1 bg-orange-400 text-white hover:opacity-80 cursor-pointer" (click)="logout()">Đăng xuất</div>
+    </div>
+</div>
+<div class="grid grid-cols-8">
+    <div class="col-span-2 bg-blue-200 min-h-screen">
+        <ul>
+            <li class="tab-title active p-5 text-[18px] hover:text-blue-600 cursor-pointer" (click)="activeContentDashboard($event)" data-title="dashboard"><i class="text-2xl mr-4 uil uil-estate" ></i>Bảng điều khiển</li>
+            <li class="tab-title p-5 text-[18px] hover:text-blue-600 cursor-pointer" (click)="activeContentDashboard($event)" data-title="product"><i class="text-2xl mr-4 uil uil-cube"></i>Sản phẩm</li>
+            <li class="tab-title p-5 text-[18px] hover:text-blue-600 cursor-pointer" (click)="activeContentDashboard($event)" data-title="order"><i class="text-2xl mr-4 uil uil-invoice"></i>Hóa đơn</li>
+            <li class="p-5 text-[18px] hover:text-blue-600 cursor-pointer"><i class="text-2xl mr-4 uil uil-social-distancing"></i>Khách hàng</li>
+            <li class="p-5 text-[18px] hover:text-blue-600 cursor-pointer"><i class="text-2xl mr-4 uil uil-chart-line"></i>Thống kê bán hàng</li>
+            <li class="p-5 text-[18px] hover:text-blue-600 cursor-pointer" (click)="routingBackToMenu()"><i class="text-2xl mr-4 uil uil-shop"></i>Quay lại cửa hàng</li>
+        </ul>
+    </div>
+    <div class="col-span-6">
+        <div class="tab-content px-8 py-10" data-content="dashboard">
+            <p class="text-center text-xl font-bold">Chào mừng bạn đến với trang quản trị cửa hàng clothes world</p>
+            <p>Ở đây hiển thị các biểu đồ...</p>
+        </div>
+        <div class="tab-content hidden px-8 py-10" data-content="product">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <p class="text-xl font-semibold">Quản lý sản phẩm</p>
+                    <p>Danh sách các sản phẩm của cửa hàng, thông tin hiển thị bao gồm tên sản phẩm, ảnh, giá, giới tính.<br/>Quản trị viên có thể thêm, xóa, sửa sản phẩm có trong danh sách</p> 
+                </div>
+                <div class="px-3 py-2 rounded bg-blue-600 text-white hover:opacity-70 cursor-pointer" (click)="openModalProduct()">Thêm sản phẩm</div>
+            </div>
+
+            <div class="relative overflow-x-auto shadow-md rounded">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Tên sản phẩm
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Ảnh
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Giá
+                            </th>
+                            <th scope="col" class="px-4 py-3">
+                                Giới tính
+                            </th>
+                            <th scope="col" class="px-4 py-3">
+                                <span class="sr-only">Edit</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="relative h-[50vh]">
+                        <div class="image-loader hidden"></div>
+                        <tr class="bg-white border-b hover:bg-gray-100" *ngFor="let product of products">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                {{ product.name }}
+                            </th>
+                            <td class="px-6 py-4 w-[124px]">
+                                <img [src]="product.image[0]" [alt]="product.alt" class="max-w-full max-h-full block">
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ product.price | currency:'VND'  }}
+                            </td>
+                            <td class="px-4 py-4">
+                                {{ product.gender }}
+                            </td>
+                            <td class="px-4 py-4 text-right">
+                                <p class="inline-block font-medium text-blue-600 dark:text-blue-500 hover:underline mr-5 cursor-pointer" (click)="editProduct(product.id!)">Sửa</p>
+                                <p class="inline-block font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer" (click)="deleteProduct(product.id!)">Xóa</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-content hidden px-8 py-10" data-content="order">
+            <div class="mb-8">
+                <p class="text-xl font-semibold">Quản lý hóa đơn</p>
+                <p>Danh sách các hóa đơn của cửa hàng, bạn có thể duyệt hóa đơn hoặc xóa hóa đơn.</p> 
+            </div>
+
+            <div class="relative overflow-x-auto shadow-md rounded">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Mã hóa đơn
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Ngày đặt
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Tổng tiền
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Trạng thái
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Địa chỉ
+                            </th>
+                            <th scope="col" class="px-4 py-3">
+                                <span class="sr-only">Edit</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-white border-b hover:bg-gray-100" *ngFor="let order of orders">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                #HD{{ order.id }}
+                            </th>
+                            <td class="px-6 py-4 w-[20%]">
+                                {{ order.dayOrder }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ order.totalPrice }}
+                            </td>
+                            <td class="px-6 py-4 w-[13%]">
+                                <span *ngIf="order.status === true; then condition1 else condition2"></span>
+                                <ng-template #condition1>Đã duyệt</ng-template>
+                                <ng-template #condition2>Chưa duyệt</ng-template>
+                            </td>
+                            <td class="px-6 py-4 w-[25%]">
+                                {{ order.address }}
+                            </td>
+                            <td class="px-4 py-4 text-right w-[16%]">
+                                <p class="inline-block font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer mr-5" (click)="openOrderModal(order)">Xem chi tiết</p>
+                                <p class="inline-block font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"(click)="deleteOrder(order.id)">Xóa</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <!--======================= MODAL PRODUCT =======================-->
+        <div id="authentication-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+            <div class="relative p-4 w-full max-w-2xl h-full md:h-auto mx-auto">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" (click)="closeModalProduct()" data-modal-toggle="authentication-modal">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                    </button>
+                    <div class="py-6 px-6 lg:px-8">
+                        <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white" id="title-modal">Thêm mới sản phẩm</h3>
+
+                        <form class="space-y-6" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+                            <div class="grid gap-6 mb-6 lg:grid-cols-2">
+                                <div>
+                                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tên sản phẩm</label>
+                                    <input type="text" formControlName="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="side pants II" required>
+                                </div>
+                                <div>
+                                    <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Giá</label>
+                                    <input type="number" formControlName="price" id="password" placeholder="139000" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+                                </div>
+                                <div>
+                                    <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Giới tính</label>
+                                    <select (change)="selectGender($event)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option value="him" selected>Nam</option>
+                                        <option value="her">Nữ</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="color" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Màu</label>
+                                    <input type="number" formControlName="color" id="color" placeholder="2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-6" formArrayName="image" id="add_images">
+                                <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Thêm các ảnh mô tả sản phẩm</p>
+                                <button (click)="addImage()" type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-800"><i class="uil uil-plus"></i> Thêm ảnh</button>
+                                <div *ngFor="let img of image.controls; let i = index" class="mt-4 flex items-center gap-[5%]">
+                                    <label for="img-{{ i }}" class="block text-sm font-medium text-gray-900 dark:text-gray-300 text-center">Ảnh {{ i + 1 }}</label>
+                                    <input id="img-{{ i }}" type="text" [formControlName]="i"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="https://images.unsplash.com/photo-16513073158...">
+                                </div>
+                            </div>
+
+                            <div class="hidden mb-6" id="display_images">
+                                <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ảnh mô tả sản phẩm</p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div *ngFor="let productImage of listImage; let i = index" class="p-4">
+                                        <img [src]="productImage" alt="anh-mo-ta" class="mb-2">
+                                        <input type="text" name="imageList-{{i}}" id="imageList-{{i}}" [value]="productImage" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="ảnh áo nam 2022" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <div>
+                                    <label for="alt" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Thông tin thay thế ảnh</label>
+                                    <input type="text" formControlName="alt" id="alt" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="ảnh áo nam 2022" required>
+                                </div>
+                            </div>
+                            <button [disabled]="!productForm.valid" type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Xác nhận</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <!--======================= MODAL PRODUCT =======================-->
+        <div id="order-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+            <div class="relative p-4 w-full max-w-4xl h-full md:h-auto mx-auto">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700" id="order-info">
+                    <!-- Modal header -->
+                    <div class="flex justify-between items-center p-5 rounded-t border-b dark:border-gray-600">
+                        <h3 class="text-xl font-medium text-gray-900 dark:text-white">
+                            Hóa đơn: #HD{{ orderDetail.id }}
+                        </h3>
+                        <button (click)="closeOrderModal()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="large-modal">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-6 space-y-6">
+                        <div>
+                            <p class="mb-4 uppercase font-semibold text-gray-600">Thông tin người đặt</p>
+                            <table class="w-full text-sm text-left text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Họ tên
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Email
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Số điện thoại
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Địa chỉ
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-white border-b">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            {{ orderDetail.orderer }}
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            {{ orderDetail.email }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ orderDetail.phone }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ orderDetail.address }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <p class="mb-4 uppercase font-semibold text-gray-600">Các sản phẩm đã đặt</p>
+                            <table class="w-full text-sm text-left text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            STT
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Tên sản phẩm
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Hình ảnh
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Đơn giá
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Số lượng
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Tổng tiền
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-white border-b" *ngFor="let product of orderDetail.products; let i = index">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            {{ i + 1 }}
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            {{ product.name }}
+                                        </td>
+                                        <td class="px-6 py-4 w-[124px]">
+                                            <img [src]="product.image" alt="" class="max-w-full max-h-full block">
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ product.price | currency:'VND' }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ product.quanlity }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ product.quanlity * product.price | currency:'VND' }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <p class="mb-4 uppercase font-semibold text-gray-600">Thanh toán</p>
+                            <table class="w-full text-sm text-left text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Tổng tiền sản phẩm
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Phí ship
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Tiền đã giảm
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Tổng tiền thanh toán
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-white border-b">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            {{ orderDetail.totalPrice | currency:'VND' }}
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            0
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            -0
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ orderDetail.totalPrice | currency:'VND' }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+                        <button (click)="downloadpdf()" data-modal-toggle="large-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"><i class="uil uil-print"></i> In đơn hàng</button>
+                        
+                        <button *ngIf="!orderDetail.status else removeCheck" (click)="checkingOrder(orderDetail.id)" data-modal-toggle="large-modal" type="button" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5  focus:z-10"><i class="uil uil-file-check-alt"></i> Duyệt đơn hàng</button>
+                        <ng-template #removeCheck>
+                        </ng-template>
+
+                        <button (click)="deleteOrder(orderDetail.id)" data-modal-toggle="large-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10"><i class="uil uil-trash-alt"></i> Xóa đơn hàng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

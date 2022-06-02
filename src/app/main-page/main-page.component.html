@@ -1,0 +1,199 @@
+<div class="block pt-[48px] sm:pt-[56px]">
+    <!--============================== CAROUSEL ==============================-->
+    <swiper class="mySwiper"
+            [loop]="true"
+            [spaceBetween]="30"
+            [centeredSlides]="true"
+            [autoplay]="{
+            delay: 2500,
+            disableOnInteraction: false
+            }">
+        <ng-template swiperSlide *ngFor="let slide of slides">
+            <a class="h-[75vh] sm:h-screen cursor-pointer" (click)="routingAltBanner(1); scrollTop()"><img [src]="slide.src" [alt]="slide.alt" /></a>
+        </ng-template>
+    </swiper>
+  
+    <!--============================== CATEGORIES BANNER ==============================-->
+    <section class="categories__banner" class="grid grid-cols-2 gap-3 md:gap-5 py-4">
+        <div class="hover:opacity-60" *ngFor="let gender of genderList">
+            <div (click)="onSelect(gender); scrollTop()">
+                <img [src]="'../../../assets/images/main-page/' + gender.image" [alt]="gender.alt">
+            </div>
+        </div>
+    </section>
+    
+    <!--============================== WHAT NEW ==============================--> 
+    <section class="py-14" id="what_new">
+        <div class="md:container md:mx-auto md:px-6">
+            <p class="text-2xl mb-4 md:text-5xl font-semibold uppercase text-center cursor-pointer">Sản phẩm mới</p>
+    
+            <div class="flex justify-center items-center mb-5">
+                <div class="category-item mr-5 active" (click)="activeCategory($event)" data-title="him">Dành cho nam</div>
+                <div class="category-item" (click)="activeCategory($event)" data-title="her">Dành cho nữ</div>
+            </div>
+    
+            <swiper data-content="him" class="sliderProduct"
+                [slidesPerView]="2.5"
+                [spaceBetween]="30"
+                [loop]="true"
+                [breakpoints]="{
+                    '640': {
+                    slidesPerView: 3.5,
+                    spaceBetween: 20
+                    },
+                    '768': {
+                    slidesPerView: 4.5,
+                    spaceBetween: 20
+                    },
+                    '1024': {
+                    slidesPerView: 4.5,
+                    spaceBetween: 20
+                    }
+                }"
+                [autoplay]="{
+                delay: 1500,
+                disableOnInteraction: false
+                }">
+    
+            <ng-template swiperSlide *ngFor="let product of productForHim">
+                <div>
+                    <a (click)="showProductDetail(product); scrollTop()">
+                        <img [src]="product.image[0]" alt="" class="hover:opacity-80">
+                    </a>
+                    <div class="pt-3 text-left">
+                        <p class="font-semibold text-base">{{ product.name | titlecase }}</p>
+                        <p class="font-semibold text-lg">{{ product.price | currency:'VND' }}</p>
+                        <p class="text-gray-400 text-xs">+{{ product.color }} màu</p>
+                    </div>
+                </div>
+            </ng-template>
+            </swiper>
+    
+            <swiper data-content="her" class="sliderProduct hidden"
+                    [slidesPerView]="2.5"
+                    [spaceBetween]="20"
+                    [breakpoints]="{
+                        '640': {
+                        slidesPerView: 3.5,
+                        spaceBetween: 20
+                        },
+                        '768': {
+                        slidesPerView: 4.5,
+                        spaceBetween: 20
+                        },
+                        '1024': {
+                        slidesPerView: 4.5,
+                        spaceBetween: 20
+                        }
+                    }"
+                    [loop]="true"
+                    [autoplay]="{
+                    delay: 1500,
+                    disableOnInteraction: false
+                    }">
+    
+                <ng-template swiperSlide *ngFor="let product of productForHer">
+                    <div>
+                        <a (click)="showProductDetail(product); scrollTop()">
+                            <img [src]="product.image[0]" alt="">
+                        </a>
+                        <div class="pt-3 text-left">
+                            <p class="font-semibold text-base">{{ product.name | titlecase }}</p>
+                            <p class="font-semibold text-lg">{{ product.price | currency:'VND' }}</p>
+                            <p class="text-gray-400 text-xs">+{{ product.color }} màu</p>
+                        </div>
+                    </div>
+                </ng-template>
+            </swiper>
+
+        </div>
+    </section>
+    
+    <!--=============================== STYLE PICK ===============================-->
+    <section class="py-14 bg-section" id="style_pick">
+        <div class="md:container md:mx-auto md:px-6">
+            <p class="text-2xl mb-14 text-white md:text-5xl font-semibold uppercase text-center cursor-pointer">Sản phẩm bán chạy</p>
+            <swiper
+            [slidesPerView]="2"
+            [spaceBetween]="20"
+            [breakpoints]="{
+                '640': {
+                slidesPerView: 3,
+                spaceBetween: 30
+                }
+            }"
+            [navigation]="true"
+            [loop]="true"
+            [autoplay]="{
+            delay: 1500,
+            disableOnInteraction: false
+            }"
+            class="mySwiper">
+            <ng-template swiperSlide class="hover:opacity-80" *ngFor="let product of productForHim">
+                <a (click)="showProductDetail(product); scrollTop()">
+                    <img [src]="product.image[0]" [alt]="product.alt">
+                </a>
+            </ng-template>
+          </swiper>
+        </div>
+    </section>
+    
+    <!--=============================== WEEKLY BEST ===============================-->
+    <section class="py-14" id="weekly_best">
+        <div class="md:container md:mx-auto md:px-6">
+
+            <p class="text-2xl mb-4 md:text-5xl font-semibold uppercase text-center cursor-pointer">Sản phẩm mới</p>
+            <div class="flex justify-center items-center mb-5">
+                <div class="tabs-heading mr-5 active" (click)="activeProduct($event)" data-title="him">Dành cho nam</div>
+                <div class="tabs-heading" (click)="activeProduct($event)" data-title="her">Dành cho nữ</div>
+            </div>
+            
+            <div data-content="him" class="tabs-content">
+                <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 md:gap-5">
+                    <a (click)="showProductDetail(product); scrollTop()" class="block mt-3" *ngFor="let product of productForHim | slice:0:8">
+                        <img [src]="product.image[0]" alt="product.alt" class="hover:opacity-80">
+                        <div class="pt-3 text-left">
+                            <p class="font-semibold text-base">{{ product.name | titlecase }}</p>
+                            <p class="font-semibold text-lg">{{ product.price | currency:'VND' }}</p>
+                            <p class="text-gray-400 text-xs">+{{ product.color }} màu</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div data-content="her" class="tabs-content hidden">
+                <div  class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 md:gap-5">
+                    <a (click)="showProductDetail(product); scrollTop()" class="block mt-3" *ngFor="let product of productForHer | slice:0:8">
+                        <img [src]=" product.image[0]" alt="product.alt" class="hover:opacity-80">
+                        <div class="pt-3 text-left">
+                            <p class="font-semibold text-base">{{ product.name | titlecase }}</p>
+                            <p class="font-semibold text-lg">{{ product.price | currency:'VND' }}</p>
+                            <p class="text-gray-400 text-xs">+{{ product.color }} màu</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!--=============================== SSSTORY ===============================-->
+    <section class="py-14" id="ssstory">
+        <div class="md:container md:mx-auto md:px-6">
+
+            <p class="text-2xl mb-4 md:text-5xl font-semibold uppercase text-center cursor-pointer">Bài viết nổi bật</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div *ngFor="let blog of blogs"> 
+                    <a (click)="routingBlogDetail(); scrollTop()" class="blog-item mt-5 block hover:text-gray-500">
+                        <div class="blog-img_item block w-full pt-[56.25%] bg-center bg-cover bg-no-repeat" [style]="blog.image"></div>
+                        <p class="uppercase font-semibold text-xl tracking-widest mt-4 cursor-pointer">{{ blog.title }}</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+</div>
+
